@@ -1,0 +1,45 @@
+name: Plan Apply
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Update ubuntu repository
+        run: sudo apt-get update
+      - name: Install dependencies
+        run: sudo apt install -y curl wget unzip
+      - name: Download and install YC cli
+        run: curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash && sudo ln -s ~/yandex-cloud/bin/yc /usr/bin/yc
+      - name: Create sa_key.json
+        run: echo "${{ secrets.CI_SA_KEY_BASE64 }}" | base64 -d > sa_key.json
+      - name: YC cli - Set folder-id
+        run: yc config set folder-id ${{ secrets.YC_FOLDER_ID }}
+      - name: YC cli - Create sa-profile
+        run: yc config profile create sa-profile
+      - name: YC cli - Set sa key
+        run: yc config set service-account-key sa_key.json
+      - name: Install terraform
+        run: wget https://hashicorp-releases.yandexcloud.net/terraform/1.8.4/terraform_1.8.4_linux_amd64.zip && sudo unzip terraform_1.8.4_linux_amd64.zip -d /usr/bin && rm -f terraform_1.8.4_linux_amd64.zip terraform && sudo chmod +x /usr/bin/terraform
+      - name: Install tflint
+        run: curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | sudo bash
+      - name: Terraform prepare
+        run: cp ./tf/.terraformrc ~/.terraformrc
+      - name: Create terraform backend credentials
+        run: echo "${{ secrets.CI_BACKEND_CREDENTIALS_BASE64 }}" | base64 -d > ./tf/backend_credentials.config
+      - name: Create K8s node keys
+        run: echo "${{ secrets.SSH_KEY_PUB_BASE64 }}" | base64 -d > ./tf/id_yc_ed25519.pub && echo "${{ secrets.SSH_KEY_PRIV_BASE64 }}" | base64 -d > ./tf/id_yc_ed25519 && echo "${{ secrets.SSH_KEY_1_PUB_BASE64 }}" | base64 -d > ./tf/id_yc_ed25519_1.pub && echo "${{ secrets.SSH_KEY_1_PRIV_BASE64 }}" | base64 -d > ./tf/id_yc_ed25519_1
+      - name: Create access token, terraform initialize and apply
+        run: |
+             cd ./tf
+             export yc_access_token=$(yc iam create-token)
+             terraform init
+             terraform apply -auto-approve -var="token=${yc_access_token}" -var="cloud_id=${{ secrets.YC_CLOUD_ID }}" -var="folder_id=${{ secrets.YC_FOLDER_ID }}" -var="dns_zone_id=${{ secrets.DNS_ZONE_ID }}" -var="certificate_id=${{ secrets.CERTIFICATE_ID }}"
+
+
+
+

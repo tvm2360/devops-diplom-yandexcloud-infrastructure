@@ -1,0 +1,22 @@
+name: Plan lint
+on:
+  push:
+    branches-ignore: ["master"]
+  pull_request:
+    branches-ignore: ["master"]
+    types: [closed]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Update ubuntu repository
+        run: sudo apt-get update
+      - name: Install dependencies
+        run: sudo apt install -y curl
+      - name: Install tflint
+        run: curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | sudo bash
+      - name: Lint
+        run: cd ./tf/ && tflint --minimum-failure-severity error

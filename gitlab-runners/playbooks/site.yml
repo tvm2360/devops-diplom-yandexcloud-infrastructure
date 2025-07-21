@@ -1,0 +1,47 @@
+---
+- name: Gitlab-runner YC install
+  hosts: gitlab-runners
+  tasks:
+    - name: Update apt packages
+      become: true
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: Install packages
+      become: true
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - software-properties-common
+          - curl
+        state: present
+    - name: Add docker repo
+      become: true
+      shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable'"
+    - name: Update apt packages
+      become: true
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: Install docker-ce
+      become: true
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+        state: present
+    - name: Install gitlab-runner
+      become: true
+      shell: "curl -L 'https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh' | sudo bash && apt install -y gitlab-runner"
+    - name: Register gitlab-runner
+      become: true
+      command: "gitlab-runner register --non-interactive --url {{ gitlab_url }} --registration-token {{ gitlab_registration_token }} --executor {{ gitlab_executor }} --docker-image {{ gitlab_docker_image }} --description {{ gitlab_description }} --tag-list {{ gitlab_tag_list }} --run-untagged={{ gitlab_run_untagged }} --locked={{ gitlab_locked }} --access-level={{ gitlab_access_level }}"
+    - name: Edit privileges and volumes /etc/gitlab-runner/config.toml
+      become: true
+      shell: |
+        sed -i 's/privileged = false/privileged = true/g' /etc/gitlab-runner/config.toml
+        sed -i '/volumes/d' /etc/gitlab-runner/config.toml
+        echo ' volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/cache"]' >> /etc/gitlab-runner/config.toml
+    - name: Install YC into started docker containers on a gitlab-runner hosts
+      become: true
+      shell: "curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash && ln -sf /root/yandex-cloud/bin/yc /usr/bin/yc"

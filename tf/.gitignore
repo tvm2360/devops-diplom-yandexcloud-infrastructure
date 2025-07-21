@@ -1,0 +1,14 @@
+**/.terraform/*
+.terraform*
+
+!.terraformrc
+
+*.tfstate
+*.tfstate.*
+
+personal.auto.tfvars
+personal.locals.tf
+*.personal.auto.tfvars
+*.personal.locals.tf
+*personal.auto.tfvars
+*personal.locals.tf
