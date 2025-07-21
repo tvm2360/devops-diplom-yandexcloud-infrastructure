@@ -253,9 +253,6 @@ No modules.
 | [yandex_vpc_subnet.devops-diplom-subnet-3](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/vpc_subnet) | resource |
 | [yandex_vpc_subnet.devops-diplom-subnet-4](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/vpc_subnet) | resource |
 | [yandex_cm_certificate.tvm2360-cm-certificate](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/data-sources/cm_certificate) | data source |
-| [yandex_compute_image.os_family_1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/data-sources/compute_image) | data source |
-| [yandex_compute_image.os_family_2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/data-sources/compute_image) | data source |
-| [yandex_compute_image.os_family_3](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/data-sources/compute_image) | data source |
 
 ### Переменные
 
@@ -296,9 +293,9 @@ No modules.
 | <a name="input_kubespray_inventory_destination_path"></a> [kubespray\_inventory\_destination\_path](#input\_kubespray\_inventory\_destination\_path) | Path to export inventory for kubespray use | `string` | `"../kubespray/inventory"` | no |
 | <a name="input_kubespray_inventory_filename"></a> [kubespray\_inventory\_filename](#input\_kubespray\_inventory\_filename) | Inventory filename for kubespray use | `string` | `"inventory.ini"` | no |
 | <a name="input_kubespray_inventory_nat_ip"></a> [kubespray\_inventory\_nat\_ip](#input\_kubespray\_inventory\_nat\_ip) | Use nat\_ip in inventory file | `bool` | `false` | no |
-| <a name="input_os_family_1"></a> [os\_family\_1](#input\_os\_family\_1) | OS family 1 | `string` | `"ubuntu-2004-lts"` | no |
-| <a name="input_os_family_2"></a> [os\_family\_2](#input\_os\_family\_2) | OS family 2 | `string` | `"gitlab"` | no |
-| <a name="input_os_family_3"></a> [os\_family\_3](#input\_os\_family\_3) | OS family 3 | `string` | `"nat-instance-ubuntu-2204"` | no |
+| <a name="input_os_image_1_id"></a> [os\_image\_1\_id](#input\_os\_image\_1\_id) | Image OS ubuntu-2004-lts | `string` | `"fd8a364q1kb08cqvr9o7"` | no |
+| <a name="input_os_image_2_id"></a> [os\_image\_2\_id](#input\_os\_image\_2\_id) | Image OS gitlab | `string` | `"fd8duj8tk09diqs6t2rq"` | no |
+| <a name="input_os_image_3_id"></a> [os\_image\_3\_id](#input\_os\_image\_3\_id) | Image OS nat-instance-ubuntu-2204 | `string` | `"fd816m4fbp8be1hkdopi"` | no |
 | <a name="input_subnet_name_1"></a> [subnet\_name\_1](#input\_subnet\_name\_1) | Subnet 1 name | `string` | `"devops-diplom-subnet-1"` | no |
 | <a name="input_subnet_name_2"></a> [subnet\_name\_2](#input\_subnet\_name\_2) | Subnet 2 name | `string` | `"devops-diplom-subnet-2"` | no |
 | <a name="input_subnet_name_3"></a> [subnet\_name\_3](#input\_subnet\_name\_3) | Subnet 3 name | `string` | `"devops-diplom-subnet-3"` | no |
@@ -312,4 +309,4 @@ No modules.
 
 ### Вывод
 
-No outputs
+No outputs.
