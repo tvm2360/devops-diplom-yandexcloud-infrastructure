@@ -25,7 +25,6 @@ resource "null_resource" "erase_local_kubespray_inventory_cfg_file" {
     kubespray_inventory_filename             = var.kubespray_inventory_filename
   }
   provisioner "local-exec" {
-    when    = apply
     command = "rm -f ${self.triggers.kubespray_inventory_destination_path}/${self.triggers.kubespray_inventory_filename}"
   }
   depends_on = [null_resource.null_copy_ssh_kubespray_inventory_to_jumphost]
