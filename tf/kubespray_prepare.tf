@@ -11,14 +11,3 @@ resource "local_file" "kubespray_inventory_cfg" {
   )
 }
 
-resource "null_resource" "kubespray_inventory_cfg_file" {
-  triggers = {
-    kubespray_inventory_destination_path     = var.kubespray_inventory_destination_path
-    kubespray_inventory_filename             = var.kubespray_inventory_filename
-  }
-  provisioner "local-exec" {
-    when    = destroy
-    command = "rm -f ${self.triggers.kubespray_inventory_destination_path}/${self.triggers.kubespray_inventory_filename}"
-  }
-  depends_on = [local_file.kubespray_inventory_cfg]
-}
