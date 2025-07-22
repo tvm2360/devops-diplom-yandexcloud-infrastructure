@@ -18,14 +18,3 @@ resource "null_resource" "null_copy_ssh_kubespray_inventory_to_jumphost" {
     null_resource.null_wait_kubespray_inventory_dir
   ]
 }
-
-resource "null_resource" "erase_local_kubespray_inventory_cfg_file" {
-  triggers = {
-    kubespray_inventory_destination_path     = var.kubespray_inventory_destination_path
-    kubespray_inventory_filename             = var.kubespray_inventory_filename
-  }
-  provisioner "local-exec" {
-    command = "rm -f ${self.triggers.kubespray_inventory_destination_path}/${self.triggers.kubespray_inventory_filename}"
-  }
-  depends_on = [null_resource.null_copy_ssh_kubespray_inventory_to_jumphost]
-}
