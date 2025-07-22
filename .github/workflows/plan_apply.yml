@@ -37,4 +37,4 @@ jobs:
              export yc_access_token=$(yc iam create-token)
              terraform init
              terraform apply -auto-approve -var="token=${yc_access_token}" -var="cloud_id=${{ secrets.YC_CLOUD_ID }}" -var="folder_id=${{ secrets.YC_FOLDER_ID }}" -var="dns_zone_id=${{ secrets.DNS_ZONE_ID }}" -var="certificate_id=${{ secrets.CERTIFICATE_ID }}"
-             terraform destroy -target local_file.kubespray_inventory_cfg
+             terraform destroy -target local_file.kubespray_inventory_cfg  -var="token=${yc_access_token}" -var="cloud_id=${{ secrets.YC_CLOUD_ID }}" -var="folder_id=${{ secrets.YC_FOLDER_ID }}" -var="dns_zone_id=${{ secrets.DNS_ZONE_ID }}" -var="certificate_id=${{ secrets.CERTIFICATE_ID }}"
