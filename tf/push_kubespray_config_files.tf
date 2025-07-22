@@ -5,6 +5,9 @@ resource "null_resource" "null_copy_ssh_kubespray_inventory_to_jumphost" {
     user = var.default_user
     private_key = "${local.ssh_key}"
   }
+  provisioner "remote-exec" {
+    inline = [ "sudo rm -f /opt/kubespray/inventory/${var.kubespray_inventory_filename}" ]
+  }
   provisioner "file" {
     source = "${var.kubespray_inventory_destination_path}/${var.kubespray_inventory_filename}"
     destination = "/opt/kubespray/inventory/${var.kubespray_inventory_filename}"
