@@ -12,7 +12,7 @@ ig_config = {
      serial_port_enable = 0
   },
   workers = {
-     count = 4,
+     count = 3,
      cpu = 2,
      ram = 4,
      core_fraction = 20,
